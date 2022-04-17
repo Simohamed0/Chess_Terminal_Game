@@ -39,47 +39,47 @@ class Game {
 
         bool est_enEchec[2] = {false, false};
         
-        Couleur rook_player = WHITE;
+        Couleur player_turn = WHITE;  // white start the game
        
         /**
-         * @brief Permet de vérifier si il y a une pièce à la position de départ
+         * @brief verify if the square is empty or not
          * 
-         * @param d_pos position de départ
-         * @return true s'il y a une pièce à la position de départ.
+         * @param d_pos departure position
+         * @return true if the square is not empty
          */
-        bool Piece_Existe(const char* d_pos);
+        bool Piece_Exist(const char* d_pos);
 
         /**
-         * @brief Permet de vérifier si le deplacement de la piece va provoquer un échec
+         * @brief verify if the next mouvement leads to a checkmate 
          * 
-         * @param d_pos position de départ
-         * @param f_pos position d'arrivée/finale
-         * @return true si le deplacement va provoquer un échec
+         * @param d_pos departure position
+         * @param f_pos final position
+         * @return true if it is the case false otherwise
          */
-        bool VersEchec(const char* d_pos, const char* f_pos);
+        bool if_checkmate(const char* d_pos, const char* f_pos);
 
         /**
-         * @brief Permet d'échanger le tour entre les joueurs
+         * @brief swap players turns
          * 
-         * @param j_tour la couleur du joueur actuel
+         * @param j_tour color of the actual player
          */
-        void swap_players(Couleur& j_tour);
+        void swap_players(Couleur& player_turn);
 
-        /**
-         * @brief Permet de connaitre l'état de la partie(en cours ou fini)
+       
+        /** 
+         *  @brief verify if the game is over or not
          * 
-         * @return Le resultat de la partie en cours.
-         */
-
+         * @return the game result
+         **/
         Result Check_result();
 
         /**
-         * @brief Permet de réaliser le mouvement roque(petit roque ou grande roque)
+         * @brief execute the castling mouvement
          * 
-         * @param d_pos position de départ
-         * @param f_pos position d'arrivée/finale
+         * @param d_pos departure position
+         * @param f_pos final position
          */
-        void mouvement_roque(const char* d_pos, const char* f_pos);
+        void castling_move(const char* d_pos, const char* f_pos);
 
         /**
          * @brief Initialise le mouvement en_passant
@@ -96,49 +96,48 @@ class Game {
         bool enpassant_move(const char* d_pos, const char* f_pos);
 
         /**
-         * @brief Permet la promotion du pion
+         * @brief promote the pawn
          * 
-         * @param pion_pos les coordonnées du pion
+         * @param pawn_pos pawn position
          */
-        void promotion(const char* pion_pos);
+        void promotion(const char* pawn_pos);
 
         
 
     public:
     
         /** @brief Constructor of a chess game
-         * 
-         * */
+        **/
         Game();
 
         /** @brief destructor 
-         * */
+        **/
         ~Game();
 
         /**
-         * @brief Permet de déplacer la pièce sur l'échiquier
+         * @brief move a piece in the board
          * 
-         * @param d_pos position de départ de la pièce
-         * @param f_pos position d'arrivée/finale de la pièce
-         * @param roque permet de dire s'il s'agit d'un mouvement roque
+         * @param d_pos departure position
+         * @param f_pos final position
+         * @param roque bool if it's a castling move
          **/
         void deplacer(const char* d_pos, const char* f_pos,bool roque = false);
 
         /**
-         * @brief Permet de vérifier si le jeu est en cours
+         * @brief verify if the game is ongoing
          * 
-         * @return true si le jeu est en cours
+         * @return true if it's the case
          **/
         bool enCours();
 
         /**
-         * @brief Permet de vérifier si le roi du joueur actuel est en échec
+         * @brief verify if the instant player is checkmate
          * 
-         * @param joueur_actuel couleur du joueur actuel (Blanc/Noir)
-         * @param position_roi  la position du roi du joueur actuel
-         * @return true si le roi du joueur actuel est en échec
+         * @param joueur_actuel color of the instant player
+         * @param position_roi  king position of the instant player
+         * @return true if the instant player's king is checkmate
          **/
-        bool est_En_Echec(Couleur joueur_actuel, const char* position_roi);
+        bool checkmate(Couleur joueur_actuel, const char* position_roi);
 
         /**
          * @brief Permet de vérifier si le joueur peut déplacer une pièce

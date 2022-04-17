@@ -3,11 +3,13 @@
 
 Game::Game() {
     
-    Game_status = "Chess game start.\n\n";
+    Game_status = "Chess game starts.\n\n";
 
-    // On initialise tous les cases de l'échiquier qui ne contiennent pas de pièce à nullptr
-    for (int ligne = 2; ligne < 6; ++ligne) {
-        for (int col = 0; col < 8; ++col) {
+    // all the empty cases are initialized at nullptr
+    for (int ligne = 2; ligne < 6; ++ligne) 
+    {
+        for (int col = 0; col < 8; ++col) 
+        {
             Board[col][ligne] = nullptr;
         }
     }
@@ -42,7 +44,7 @@ Game::Game() {
     strcpy(king_position[WHITE],"e1");
     strcpy(king_position[BLACK],"e8");
 
-    rook_player = WHITE;
+    player_turn = WHITE;
     resultat = ongoing;
 }
 
@@ -74,7 +76,7 @@ Game::~Game() {
 
 Couleur Game::get_Jactuel()
 {
-    return this->rook_player;
+    return player_turn;
 }
 
 bool Game::enCours() {
@@ -115,28 +117,28 @@ void Game::deplacer(const char* d_pos, const char* f_pos, bool roque) {
 
     Game_status.clear();
 
-    Couleur autre_rook_player = rook_player;
-    swap_players(autre_rook_player);
+    Couleur other_player = player_turn;
+    swap_players(other_player);
 
-    if(!Piece_Existe(d_pos)) {
+    if(!Piece_Exist(d_pos)) {
         return;
     }
     // Fonctionalité Prise en Passant
     if(enpassant_move(d_pos,f_pos))
     {
-        swap_players(rook_player);
+        swap_players(player_turn);
         return;
     }
     // Fonctionalité Roque
     if (roque)
     {
-        mouvement_roque(d_pos, f_pos);
+        castling_move(d_pos, f_pos);
         return;
     }
     const int col = d_pos[0] - 'a';
     const int ligne = d_pos[1] - '1';
 
-    int erreur = Board[col][ligne]->Mouvement_EstValide(d_pos, f_pos, Board, rook_player);
+    int erreur = Board[col][ligne]->Mouvement_EstValide(d_pos, f_pos, Board, player_turn);
 
     switch (erreur) {
         case WRONG_PLAYER :
@@ -192,9 +194,9 @@ void Game::deplacer(const char* d_pos, const char* f_pos, bool roque) {
             return;
     }
     
-    if (VersEchec(d_pos, f_pos) == DEPLACEMENT_ECHEC) {
+    if (if_checkmate(d_pos, f_pos) == DEPLACEMENT_ECHEC) {
         invalide = true;
-        if (est_enEchec[rook_player]) {
+        if (est_enEchec[player_turn]) {
             if (Board[col][ligne]->getCouleur() == WHITE)
                 Game_status += "Vous ne pouvez pas déplacer votre " + string(CodePiece_Blanche[Board[col][ligne]->getType()]);
             else
@@ -234,15 +236,15 @@ void Game::deplacer(const char* d_pos, const char* f_pos, bool roque) {
     else
         Game_status += string(CodePiece_Noir[Board[col][ligne]->getType()]);
 
-    Game_status += " s'est deplacé de ";
+    Game_status += " moved from ";
     Game_status += d_pos;
-    Game_status += " vers ";
+    Game_status += " to ";
     Game_status += f_pos;
 
     Board[d_x][d_y]->deplace();    // Utile pour le mouvement Roque
 
     if (Board[d_x][d_y]->getType() == king)
-        strcpy(king_position[rook_player], f_pos);    
+        strcpy(king_position[player_turn], f_pos);    
 
 
     if (Board[f_x][f_y] != NULL) {
@@ -262,7 +264,7 @@ void Game::deplacer(const char* d_pos, const char* f_pos, bool roque) {
         Game_status += ".\n";
     }
 
-    if (Board[d_x][d_y]->getType() == pawn)     // Utile pour la promotion
+    if (Board[d_x][d_y]->getType() == pawn)     // handy for the promotion
     {
         if (f_y == 7 || f_y == 0)
             promotion(d_pos);
@@ -273,24 +275,26 @@ void Game::deplacer(const char* d_pos, const char* f_pos, bool roque) {
     }
     Board[f_x][f_y] = Board[d_x][d_y];
     Board[d_x][d_y] = NULL;
-    if (est_En_Echec(autre_rook_player, king_position[autre_rook_player])) {
-        est_enEchec[autre_rook_player] = true;
-        Game_status += "\n\t Le Roi du Joueur " + string(afficher_couleur[autre_rook_player]);
-        Game_status += " est en echec";
+    if (checkmate(other_player, king_position[other_player])) 
+    {
+        est_enEchec[other_player] = true;
+        
+        Game_status += "\n\t checkmate " + string(color_display[player_turn]);
+        Game_status += " player win";
     }
     else 
-        est_enEchec[autre_rook_player] = false;
+        est_enEchec[other_player] = false;
 
-    swap_players(rook_player);
+    swap_players(player_turn);
     resultat = Check_result();
-    if (resultat == ongoing && est_enEchec[autre_rook_player])
+    if (resultat == ongoing && est_enEchec[other_player])
         Game_status += ".\n";
 
     Game_status += "\n";
 }
 
 
-bool Game::VersEchec(const char* d_pos, const char* f_pos) {
+bool Game::if_checkmate(const char* d_pos, const char* f_pos) {
     const int d_x = d_pos[0] - 'a';
     const int d_y = d_pos[1] - '1';
     const int f_x = f_pos[0] - 'a';
@@ -301,22 +305,23 @@ bool Game::VersEchec(const char* d_pos, const char* f_pos) {
     Board[f_x][f_y] = Board[d_x][d_y];
     Board[d_x][d_y] = NULL;
 
-    char king_position_tmp[3]; // On stock la position du roi
-    strcpy(king_position_tmp, king_position[rook_player]);
+    char king_position_tmp[3]; // saving the king position
+    strcpy(king_position_tmp, king_position[player_turn]);
 
     if (Board[f_x][f_y]->getType() == king)
-        strcpy(king_position[rook_player], f_pos);
+        strcpy(king_position[player_turn], f_pos);
 
-    if (est_En_Echec(rook_player, king_position[rook_player])) {
+    if (checkmate(player_turn, king_position[player_turn])) 
+    {
         Board[d_x][d_y] = Board[f_x][f_y];
         Board[f_x][f_y] = piece_tmp;
-        strcpy(king_position[rook_player], king_position_tmp);
+        strcpy(king_position[player_turn], king_position_tmp);
         return DEPLACEMENT_ECHEC;
     }
 
     Board[d_x][d_y] = Board[f_x][f_y];
     Board[f_x][f_y] = piece_tmp;
-    strcpy(king_position[rook_player], king_position_tmp);
+    strcpy(king_position[player_turn], king_position_tmp);
     return OK;
 }
 
@@ -324,14 +329,14 @@ bool Game::VersEchec(const char* d_pos, const char* f_pos) {
 
 
 
-bool Game::Piece_Existe(const char* d_pos) {
+bool Game::Piece_Exist(const char* d_pos) {
 
     
     const int col = d_pos[0] - 'a';
     const int ligne = d_pos[1] - '1';
     if (Board[col][ligne] == NULL) {
         invalide = true;
-        Game_status += "Il n'y a pas de pièce à la position ";
+        Game_status += "no piece exists at ";
         Game_status += d_pos;
         Game_status += ".\n\n";
         return false;
@@ -371,7 +376,7 @@ void Game::afficher() const {
 }
 
 
-bool Game::est_En_Echec(Couleur joueur_actuel, const char* king_position) {
+bool Game::checkmate(Couleur joueur_actuel, const char* king_position) {
     // Vérifier si une des pièces du joueur adverse peuvent attacker le roi du joueur actuel.
     Couleur autre_joueur = joueur_actuel;
     swap_players(autre_joueur);
@@ -407,28 +412,28 @@ bool Game::Peut_Deplacer(Couleur joueur) {
                         f_pos[0] = k;
                         f_pos[1] = l;
                         if (Board[i - 'a'][j - '1']->Mouvement_EstValide(d_pos, f_pos, Board, joueur) == OK)
-                            if (VersEchec(d_pos, f_pos) != DEPLACEMENT_ECHEC) 
+                            if (if_checkmate(d_pos, f_pos) != DEPLACEMENT_ECHEC) 
                                 return true;
                     }
     return false;
 }
 
 
-void Game::swap_players(Couleur &rook_player) {
+void Game::swap_players(Couleur &player_turn) {
     
-    if (rook_player == WHITE)
+    if (player_turn == WHITE)
     {
-        rook_player = BLACK;
+        player_turn = BLACK;
     }
     else
     {
-        rook_player = WHITE;
+        player_turn = WHITE;
     }
 }
 
-void Game::mouvement_roque(const char* d_pos, const char* f_pos) {
+void Game::castling_move(const char* d_pos, const char* f_pos) {
 
-    if (strcmp(king_position[rook_player], d_pos))
+    if (strcmp(king_position[player_turn], d_pos))
         return;
     
     int d_x = d_pos[0] - 'a';
@@ -445,7 +450,8 @@ void Game::mouvement_roque(const char* d_pos, const char* f_pos) {
     int increment = -1;
 
     // Cas Petit-Roque
-    if (delta_x == 2) {
+    if (delta_x == 2) 
+    {
         Tour_d_x = 7;
         increment = 1;
     }
@@ -453,7 +459,7 @@ void Game::mouvement_roque(const char* d_pos, const char* f_pos) {
     if (Board[Tour_d_x][d_y] == NULL) 
         return;
 
-    if (Board[Tour_d_x][d_y]->getCouleur() != rook_player)
+    if (Board[Tour_d_x][d_y]->getCouleur() != player_turn)
         return;   
     
     if (Board[Tour_d_x][d_y]->getType() != rook)
@@ -481,9 +487,9 @@ void Game::mouvement_roque(const char* d_pos, const char* f_pos) {
         return;
     }
 
-    if (est_En_Echec(rook_player, king_position[rook_player])) {
+    if (checkmate(player_turn, king_position[player_turn])) {
         invalide = true;
-        Game_status += "Le mouvement roque est impossible car ";
+        Game_status += "Castling is impossible because of ";
         if (Board[Tour_d_x][d_y]->getCouleur() == WHITE)
             Game_status += string(CodePiece_Blanche[Board[d_x][d_y]->getType()]);
         else
@@ -495,37 +501,37 @@ void Game::mouvement_roque(const char* d_pos, const char* f_pos) {
     for (int i = d_x + increment; i != Tour_d_x; i += increment) {
         invalide = true;
         if (Board[i][d_y] != NULL) {
-            Game_status += "Le mouvemnt roque est impossible car il y a un obstacle.\n\n";
+            Game_status += "Castling is impossible because of obstacle.\n\n";
             return;
         }
     }
 
     invalide = false;
     
-    strcpy(king_position[rook_player], f_pos);
-    Board[f_x][f_y] = Board[d_x][d_y];  // Deplacement Roi
+    strcpy(king_position[player_turn], f_pos);
+    Board[f_x][f_y] = Board[d_x][d_y];  // king mouvement
     Board[d_x][d_y] = NULL;
     
-    Board[d_x + increment][d_y] = Board[Tour_d_x][d_y]; // Deplacement Tour
+    Board[d_x + increment][d_y] = Board[Tour_d_x][d_y]; // rook mouvement
     Board[Tour_d_x][d_y] = NULL;
 
-    Game_status += "Le Joueur ";
-    Game_status += std::string(afficher_couleur[rook_player]);
-    Game_status += " vient d'effectuer un mouvement ";
-    if (increment == -1) Game_status += "grand-";
-    else Game_status += "petit-";
-    Game_status += "roque.\n\n";
+    Game_status += std::string(color_display[player_turn]);
+    Game_status += " player ";
+    Game_status += " has executed";
+    if (increment == -1) Game_status += " queenside- ";
+    else Game_status += " kingside- ";
+    Game_status += "castling.\n\n";
     compteur ++;
-    swap_players(rook_player);
+    swap_players(player_turn);
 
     return;
 }
 
 
-void Game::promotion(const char* pion_pos) {
+void Game::promotion(const char* pawn_pos) {
     char c='N';
-    int d_x = pion_pos[0] - 'a';
-    int d_y = pion_pos[1] - '1';
+    int d_x = pawn_pos[0] - 'a';
+    int d_y = pawn_pos[1] - '1';
     delete Board[d_x][d_y];
 
     debut:
@@ -535,23 +541,23 @@ void Game::promotion(const char* pion_pos) {
     switch(c)
     {
         case 'Q':
-            Board[d_x][d_y] = new Queen(rook_player);
-            Game_status += string(afficher_couleur[rook_player]) + "Pawn " ;
+            Board[d_x][d_y] = new Queen(player_turn);
+            Game_status += string(color_display[player_turn]) + "Pawn " ;
             Game_status += " is promoted to Queen\n\n";
             break;
         case 'K':
-            Board[d_x][d_y] = new Knight(rook_player);
-            Game_status += string(afficher_couleur[rook_player]) + "Pawn " ;
+            Board[d_x][d_y] = new Knight(player_turn);
+            Game_status += string(color_display[player_turn]) + "Pawn " ;
             Game_status += " is promoted to Knight\n\n";;
             break;
         case 'B':
-            Board[d_x][d_y] = new Bishop(rook_player);
-            Game_status += string(afficher_couleur[rook_player]) + "Pawn " ;
+            Board[d_x][d_y] = new Bishop(player_turn);
+            Game_status += string(color_display[player_turn]) + "Pawn " ;
             Game_status += " is promoted to Bishop\n\n";;
             break;
         case 'R':
-            Board[d_x][d_y] = new Rook(rook_player);
-            Game_status += string(afficher_couleur[rook_player]) + "Pawn " ;
+            Board[d_x][d_y] = new Rook(player_turn);
+            Game_status += string(color_display[player_turn]) + "Pawn " ;
             Game_status += " is promoted to Rook\n\n";;
             break;
         default:
@@ -588,14 +594,14 @@ bool Game::enpassant_move(const char* d_pos, const char* f_pos)
         
     int delta_y = f_y - d_y;
 
-    if (rook_player == BLACK)
+    if (player_turn == BLACK)
         delta_y = delta_y * (-1);
     
     if (Board[f_x][d_y] != NULL && Board[f_x][d_y]->getType() == pawn )
     {
         if(Board[f_x][d_y]->Est_En_Passant())
         {
-            if(rook_player == WHITE)
+            if(player_turn == WHITE)
             {
                 if(d_y == 4 && f_y == 5)
                 {
@@ -678,15 +684,16 @@ bool Game::enpassant_move(const char* d_pos, const char* f_pos)
 
 
 Result Game::Check_result() {
-    if (est_enEchec[rook_player]) {
-        if (!Peut_Deplacer(rook_player)) 
+    
+    if (est_enEchec[player_turn]) 
+    {
+        if (!Peut_Deplacer(player_turn)) 
         {
-            Game_status += " et mat.\n";
             return ended;
         }
     }
     else {
-        if (compteur == 50 || !Peut_Deplacer(rook_player)) {
+        if (compteur == 50 || !Peut_Deplacer(player_turn)) {
             Game_status += "\tGame ended in stalemate.\n";
             return ended;
         }

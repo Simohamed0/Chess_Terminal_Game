@@ -74,9 +74,10 @@ int main() {
                 m_Game.deplacer("e8", "c8",true);
             }
         }
-        if (input != "quit")
+        else
         {
-            cerr << "\tLes Coordonées " << input << " sont invalides.\n";
+            if(input != "quit")
+            cerr << "\tYour coordinates " << input << " are not correct retry !.\n";
         }
         
     }

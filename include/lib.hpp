@@ -9,7 +9,7 @@
 #define OBSTACLE           5    
 
 enum Couleur {WHITE, BLACK};
-const char afficher_couleur[][6] = {"Blanc", "Noir"};
+const char color_display[][6] = {"white", "black"};
 
 enum Type {null, pawn, knight, bishop, rook, queen, king};
 
