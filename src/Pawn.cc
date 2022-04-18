@@ -1,8 +1,8 @@
 #include "Pawn.hpp"
 
 
-Pawn::Pawn(Couleur couleur) : Piece(couleur) {
-    type = pawn;
+Pawn::Pawn(Color couleur) : Piece(couleur) {
+    m_type = pawn;
 }
 
 int Pawn::Mouvement_Piece(const char* d_pos, const char* f_pos, Piece* echiquier[][8]) const {
@@ -27,7 +27,7 @@ bool Pawn::AdjacentV(const char* d_pos, const char* f_pos, Piece* echiquier[][8]
     int delta_y = f_y - d_y;
     int delta_x = abs(f_x - d_x);
     
-    if (this->getCouleur() == BLACK)
+    if (this->getColor() == BLACK)
     {
         delta_y = delta_y * (-1);
     }
@@ -60,7 +60,7 @@ bool Pawn::DetectionObstacle(const char* d_pos, const char* f_pos, Piece* echiqu
     int f_y = f_pos[1] - '1';
     int delta_y = abs(f_y - d_y);
 
-    int increment = (this->getCouleur() == BLACK) ? -1 : 1;
+    int increment = (this->getColor() == BLACK) ? -1 : 1;
 
     if (delta_y == 2)
         if (echiquier[d_x][d_y + increment] != NULL)

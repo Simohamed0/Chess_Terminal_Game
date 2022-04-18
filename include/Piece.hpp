@@ -11,30 +11,29 @@ using namespace std;
 
 
 /**
- * @brief Cette classe a pour vocation de manipuler les pièces
- *        Elle a pour rôle de connaitre les mouvements possible des pieces.
+ * @brief This class implements and deals with chess pieces 
+ *        and their legal mouvements in the game.
  * 
  **/
 class Piece {
 
     protected:
 
-        Couleur couleur;
-        Type type = null;
-
+        Color m_color;
+        Type m_type = null;
 
         /**
          * @brief virtal method that define the authorized piece mouvement of each piece
          *
          * @param src departure position
          * @param dst destination position
-         * @param echiquier[][8] 
+         * @param Board[][8] 
          * @return 0 if the movement is authorized
          */
-        virtual int Mouvement_Piece(const char* d_pos, const char* f_pos, Piece* echiquier[][8]) const {
+        virtual int Mouvement_Piece(const char* d_pos, const char* f_pos, Piece* Board[][8]) const {
             (void)d_pos;
             (void)f_pos;
-            (void)echiquier;
+            (void)Board;
             return OK;};
         
         /**
@@ -42,13 +41,13 @@ class Piece {
          *
          * @param src departure position
          * @param dst destination position
-         * @param echiquier pointer to echiquier[][8]
+         * @param Board pointer to Board[][8]
          * @return 0 if there is no obstacle
          */
-        virtual bool DetectionObstacle(const char* d_pos, const char* f_pos, Piece* echiquier[][8]) const {
+        virtual bool DetectionObstacle(const char* d_pos, const char* f_pos, Piece* Board[][8]) const {
             (void) d_pos;
             (void) f_pos;
-            (void)echiquier;
+            (void)Board;
             return OK;}; 
 
         /**
@@ -80,27 +79,26 @@ class Piece {
 
     public:
 
-        Piece(Couleur couleur);
+        Piece(Color couleur);
 
         virtual ~Piece();
 
         /**
-         * @brief Permet de vérifier si le mouvement est valide ou pas de la piece
+         * @brief verify if the mouvement is legal or not
          *
-         * @param d_pos position de départ
-         * @param f_pos position d'arrivé/finale
-         * @param echiquier[][8] pointeur vers la piece.
-         * @param j_tour couleur du joueur actuel
-         * @return 0 si le mouvement est valide.
+         * @param d_pos departure position
+         * @param f_pos final position
+         * @param Board
+         * @param actual_player 
+         * @return 0 is it's legal
          */
-        int Mouvement_EstValide(const char* d_pos, const char* f_pos, Piece* echiquier[][8], Couleur j_tour) const;
+        int Mouvement_EstValide(const char* d_pos, const char* f_pos, Piece* Board[][8], Color actual_player) const;
 
         /**
          * @brief Permet de vérifier si la pièce à bouger
          *        ça sera utile pour coder le mouvement Roque.
          * @return true si la pièce à bouger.
          */
-
         virtual bool sestDeplace() const {return 0;};
 
         /**
@@ -112,7 +110,7 @@ class Piece {
         virtual void En_Passant(){return;};
         virtual void Pas_En_Passant(){return;};
 
-        Couleur getCouleur() const;
+        Color getColor() const;
         Type   getType() const;
 
 

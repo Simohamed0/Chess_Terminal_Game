@@ -1,9 +1,9 @@
 #include "King.hpp"
 
 
-King::King(Couleur couleur) : Piece(couleur) {
+King::King(Color couleur) : Piece(couleur) {
     
-    type = king;
+    m_type = king;
 }
 
 

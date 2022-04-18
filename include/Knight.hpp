@@ -20,5 +20,5 @@ class Knight : public Piece {
         
     public:
 
-        Knight(Couleur couleur);
+        Knight(Color couleur);
 };

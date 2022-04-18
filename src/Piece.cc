@@ -1,32 +1,32 @@
 #include "Piece.hpp"
 
 
-Piece::Piece(Couleur couleur) : couleur(couleur) {}
+Piece::Piece(Color m_color) : m_color(m_color) {}
 
 
 Piece::~Piece(){}
 
 
-Couleur Piece::getCouleur() const {
-    return this->couleur;
+Color Piece::getColor() const {
+    return m_color;
 }
 
 
  Type Piece::getType() const {
-    return this->type;
+    return m_type;
 }
 
 
-int Piece::Mouvement_EstValide(const char* d_pos, const char* f_pos, Piece* echiquier[][8], Couleur j_tour) const {
+int Piece::Mouvement_EstValide(const char* d_pos, const char* f_pos, Piece* echiquier[][8], Color j_tour) const {
 
         
-    if (j_tour != this->couleur)
+    if (j_tour != this->m_color)
         return WRONG_PLAYER;
     
     const int col = f_pos[0] - 'a';
     const int ligne = f_pos[1] - '1';
     if (echiquier[col][ligne] != NULL) {
-        if (echiquier[col][ligne]->getCouleur() == this->couleur)
+        if (echiquier[col][ligne]->getColor() == this->m_color)
             return OCCUPIED_CASE;
     }
 

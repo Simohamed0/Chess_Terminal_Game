@@ -45,7 +45,8 @@ Game::Game() {
     strcpy(king_position[BLACK],"e8");
 
     player_turn = WHITE;
-    resultat = ongoing;
+    game_over = false;
+    
 }
 
 Game::~Game() {
@@ -56,12 +57,12 @@ Game::~Game() {
             for (char col('a');col<='h';col++) {
                 if(Board[col - 'a'][row] != NULL)
                 {
-                    if (Board[col - 'a'][row]->getCouleur() == WHITE)
+                    if (Board[col - 'a'][row]->getColor() == WHITE)
                         // get pieces with theit PGN names, 
                         // true -> with P for pawns, true -> w/b for colors.
-                        output += pgn_piece_name(string(CodePiece_Blanche[Board[col - 'a'][row]->getType()]),true,true);  
+                        output += pgn_piece_name(string(WhitePiece_code[Board[col - 'a'][row]->getType()]),true,true);  
                     else
-                        output += pgn_piece_name(string(CodePiece_Blanche[Board[col - 'a'][row]->getType()]),true,true);
+                        output += pgn_piece_name(string(WhitePiece_code[Board[col - 'a'][row]->getType()]),true,true);
                 }
                 output += ",";
             }
@@ -74,14 +75,10 @@ Game::~Game() {
 }
 
 
-Couleur Game::get_Jactuel()
-{
+Color Game::instant_player() const{
     return player_turn;
 }
 
-bool Game::enCours() {
-    return resultat ? false : true;
-}
 
 
 string Game::pgn_piece_name(string const name, bool view_pawn, bool view_color) const 
@@ -117,7 +114,7 @@ void Game::deplacer(const char* d_pos, const char* f_pos, bool roque) {
 
     Game_status.clear();
 
-    Couleur other_player = player_turn;
+    Color other_player = player_turn;
     swap_players(other_player);
 
     if(!Piece_Exist(d_pos)) {
@@ -143,26 +140,26 @@ void Game::deplacer(const char* d_pos, const char* f_pos, bool roque) {
     switch (erreur) {
         case WRONG_PLAYER :
             invalide = true;
-            if (Board[col][ligne]->getCouleur() == WHITE)
-                Game_status += "Vous ne pouvez pas déplacer " + string(CodePiece_Blanche[Board[col][ligne]->getType()]) 
+            if (Board[col][ligne]->getColor() == WHITE)
+                Game_status += "Vous ne pouvez pas déplacer " + string(WhitePiece_code[Board[col][ligne]->getType()]) 
                             + " .Ce n'est pas votre pièce.\n\n";
             else
-                Game_status += "Vous ne pouvez pas déplacer " + string(CodePiece_Noir[Board[col][ligne]->getType()]) 
+                Game_status += "Vous ne pouvez pas déplacer " + string(BlackPiece_code[Board[col][ligne]->getType()]) 
                             + " .Ce n'est pas votre pièce.\n\n";
             return;
         case OCCUPIED_CASE :
             invalide = true;
             Game_status += f_pos;
-            if (Board[col][ligne]->getCouleur() == WHITE)
-                Game_status += " est occupée par votre " + string(CodePiece_Blanche[Board[f_pos[0] - 'a'][f_pos[1] - '1']->getType()]) + " .\n\n";
+            if (Board[col][ligne]->getColor() == WHITE)
+                Game_status += " est occupée par votre " + string(WhitePiece_code[Board[f_pos[0] - 'a'][f_pos[1] - '1']->getType()]) + " .\n\n";
             else
-                Game_status += " est occupée par votre " + string(CodePiece_Noir[Board[f_pos[0] - 'a'][f_pos[1] - '1']->getType()])    + " .\n\n";
+                Game_status += " est occupée par votre " + string(BlackPiece_code[Board[f_pos[0] - 'a'][f_pos[1] - '1']->getType()])    + " .\n\n";
             return;
         case MOUVEMENT_INVALIDE :
             invalide = true;
-            if (Board[col][ligne]->getCouleur() == WHITE)
+            if (Board[col][ligne]->getColor() == WHITE)
             {
-                Game_status += "Votre " + string(CodePiece_Blanche[Board[col][ligne]->getType()]);
+                Game_status += "Votre " + string(WhitePiece_code[Board[col][ligne]->getType()]);
                 Game_status += " ne peut pas se déplacer de ";
                 Game_status += d_pos;
                 Game_status += " vers ";
@@ -171,7 +168,7 @@ void Game::deplacer(const char* d_pos, const char* f_pos, bool roque) {
             }
             else
             {
-                Game_status += "Votre " + string(CodePiece_Noir[Board[col][ligne]->getType()]);
+                Game_status += "Votre " + string(BlackPiece_code[Board[col][ligne]->getType()]);
                 Game_status += " ne peut pas se déplacer de ";
                 Game_status += d_pos;
                 Game_status += " vers ";
@@ -181,10 +178,10 @@ void Game::deplacer(const char* d_pos, const char* f_pos, bool roque) {
             return;
         case OBSTACLE :
             invalide = true;
-            if (Board[col][ligne]->getCouleur() == WHITE)
-                Game_status += "Votre " + string(CodePiece_Blanche[Board[col][ligne]->getType()]);
+            if (Board[col][ligne]->getColor() == WHITE)
+                Game_status += "Votre " + string(WhitePiece_code[Board[col][ligne]->getType()]);
             else
-                Game_status += "Votre " + string(CodePiece_Noir[Board[col][ligne]->getType()]);
+                Game_status += "Votre " + string(BlackPiece_code[Board[col][ligne]->getType()]);
         
             Game_status += " ne peut pas se déplacer de ";
             Game_status += d_pos;
@@ -197,10 +194,10 @@ void Game::deplacer(const char* d_pos, const char* f_pos, bool roque) {
     if (if_checkmate(d_pos, f_pos) == DEPLACEMENT_ECHEC) {
         invalide = true;
         if (est_enEchec[player_turn]) {
-            if (Board[col][ligne]->getCouleur() == WHITE)
-                Game_status += "Vous ne pouvez pas déplacer votre " + string(CodePiece_Blanche[Board[col][ligne]->getType()]);
+            if (Board[col][ligne]->getColor() == WHITE)
+                Game_status += "Vous ne pouvez pas déplacer votre " + string(WhitePiece_code[Board[col][ligne]->getType()]);
             else
-                Game_status += "Vous ne pouvez pas déplacer votre " + string(CodePiece_Noir[Board[col][ligne]->getType()]);
+                Game_status += "Vous ne pouvez pas déplacer votre " + string(BlackPiece_code[Board[col][ligne]->getType()]);
 
             Game_status += " de ";
             Game_status += d_pos;
@@ -209,11 +206,11 @@ void Game::deplacer(const char* d_pos, const char* f_pos, bool roque) {
             Game_status += " car votre Roi est en echec.\n\n";
         }
         else {
-            if (Board[col][ligne]->getCouleur() == WHITE)
+            if (Board[col][ligne]->getColor() == WHITE)
 
-                Game_status += "Vous ne pouvez pas déplacer votre " + string(CodePiece_Blanche[Board[col][ligne]->getType()]);
+                Game_status += "Vous ne pouvez pas déplacer votre " + string(WhitePiece_code[Board[col][ligne]->getType()]);
             else
-                Game_status += "Vous ne pouvez pas déplacer votre " + string(CodePiece_Noir[Board[col][ligne]->getType()]);
+                Game_status += "Vous ne pouvez pas déplacer votre " + string(BlackPiece_code[Board[col][ligne]->getType()]);
 
             Game_status += " de ";
             Game_status += d_pos;
@@ -231,30 +228,30 @@ void Game::deplacer(const char* d_pos, const char* f_pos, bool roque) {
     const int f_x = f_pos[0] - 'a';
     const int f_y = f_pos[1] - '1';
 
-    if (Board[col][ligne]->getCouleur() == WHITE)
-        Game_status += string(CodePiece_Blanche[Board[col][ligne]->getType()]);
+    if (Board[col][ligne]->getColor() == WHITE)
+        Game_status += string(WhitePiece_code[Board[col][ligne]->getType()]);
     else
-        Game_status += string(CodePiece_Noir[Board[col][ligne]->getType()]);
+        Game_status += string(BlackPiece_code[Board[col][ligne]->getType()]);
 
     Game_status += " moved from ";
     Game_status += d_pos;
     Game_status += " to ";
     Game_status += f_pos;
 
-    Board[d_x][d_y]->deplace();    // Utile pour le mouvement Roque
+    Board[d_x][d_y]->deplace();    // for castling
 
     if (Board[d_x][d_y]->getType() == king)
         strcpy(king_position[player_turn], f_pos);    
 
 
     if (Board[f_x][f_y] != NULL) {
-        Game_status += " en mangeant ";
-        if (Board[f_x][f_y]->getCouleur() == WHITE)
-            Game_status += string(CodePiece_Blanche[Board[f_x][f_y]->getType()]);
+        Game_status += " by eating ";
+        if (Board[f_x][f_y]->getColor() == WHITE)
+            Game_status += string(WhitePiece_code[Board[f_x][f_y]->getType()]);
         else
-            Game_status += string(CodePiece_Noir[Board[f_x][f_y]->getType()]);
+            Game_status += string(BlackPiece_code[Board[f_x][f_y]->getType()]);
         Game_status += ".\n";
-        compteur = 0;
+        counter = 0;
         // deallocate taken piece    
         delete Board[f_x][f_y];
     }
@@ -271,11 +268,11 @@ void Game::deplacer(const char* d_pos, const char* f_pos, bool roque) {
     }
     else
     {
-        compteur ++;
+        counter ++;
     }
     Board[f_x][f_y] = Board[d_x][d_y];
     Board[d_x][d_y] = NULL;
-    if (checkmate(other_player, king_position[other_player])) 
+    if (toward_checkmate(other_player, king_position[other_player])) 
     {
         est_enEchec[other_player] = true;
         
@@ -286,8 +283,9 @@ void Game::deplacer(const char* d_pos, const char* f_pos, bool roque) {
         est_enEchec[other_player] = false;
 
     swap_players(player_turn);
-    resultat = Check_result();
-    if (resultat == ongoing && est_enEchec[other_player])
+
+    game_over = Check_result();
+    if (est_enEchec[other_player] && !game_over)
         Game_status += ".\n";
 
     Game_status += "\n";
@@ -311,7 +309,7 @@ bool Game::if_checkmate(const char* d_pos, const char* f_pos) {
     if (Board[f_x][f_y]->getType() == king)
         strcpy(king_position[player_turn], f_pos);
 
-    if (checkmate(player_turn, king_position[player_turn])) 
+    if (toward_checkmate(player_turn, king_position[player_turn])) 
     {
         Board[d_x][d_y] = Board[f_x][f_y];
         Board[f_x][f_y] = piece_tmp;
@@ -345,7 +343,7 @@ bool Game::Piece_Exist(const char* d_pos) {
 }
 
 
-void Game::afficher() const {
+void Game::display() const{
     {
         // Displays a unicode chess board as well as material advantage.
         string space5 = string(5,' ');
@@ -359,10 +357,10 @@ void Game::afficher() const {
                             cout << "|" ;
                             if (Board[j][i]) { 
                             cout << "\u0020\u0020";  //U+0020 est un esapce utf-8 taille police
-                            if (Board[j][i]->getCouleur() == WHITE)
-                                cout << CodePiece_Blanche[Board[j][i]->getType()];
-                            else if (Board[j][i]->getCouleur() == BLACK)
-                                cout << CodePiece_Noir[Board[j][i]->getType()];
+                            if (Board[j][i]->getColor() == WHITE)
+                                cout << WhitePiece_code[Board[j][i]->getType()];
+                            else if (Board[j][i]->getColor() == BLACK)
+                                cout << BlackPiece_code[Board[j][i]->getType()];
                             cout << "\u0020" << " ";
                             }
                             else 
@@ -376,9 +374,9 @@ void Game::afficher() const {
 }
 
 
-bool Game::checkmate(Couleur joueur_actuel, const char* king_position) {
+bool Game::toward_checkmate(Color joueur_actuel, const char* king_position) {
     // Vérifier si une des pièces du joueur adverse peuvent attacker le roi du joueur actuel.
-    Couleur autre_joueur = joueur_actuel;
+    Color autre_joueur = joueur_actuel;
     swap_players(autre_joueur);
     char test_pos[2];
     for (int col = 0; col < 8; ++col) {
@@ -399,7 +397,7 @@ bool Game::checkmate(Couleur joueur_actuel, const char* king_position) {
 
 
 
-bool Game::Peut_Deplacer(Couleur joueur) {
+bool Game::can_move(Color joueur) {
     char d_pos[2];
     char f_pos[2];
     for (int i = 'a'; i < 'i'; ++i) 
@@ -419,7 +417,7 @@ bool Game::Peut_Deplacer(Couleur joueur) {
 }
 
 
-void Game::swap_players(Couleur &player_turn) {
+void Game::swap_players(Color &player_turn) {
     
     if (player_turn == WHITE)
     {
@@ -459,7 +457,7 @@ void Game::castling_move(const char* d_pos, const char* f_pos) {
     if (Board[Tour_d_x][d_y] == NULL) 
         return;
 
-    if (Board[Tour_d_x][d_y]->getCouleur() != player_turn)
+    if (Board[Tour_d_x][d_y]->getColor() != player_turn)
         return;   
     
     if (Board[Tour_d_x][d_y]->getType() != rook)
@@ -468,10 +466,10 @@ void Game::castling_move(const char* d_pos, const char* f_pos) {
     if (Board[Tour_d_x][d_y]->sestDeplace()) {
         invalide = true;
         Game_status += "Le mouvement roque est impossible car ";
-        if (Board[Tour_d_x][d_y]->getCouleur() == WHITE)
-            Game_status += string(CodePiece_Blanche[Board[Tour_d_x][d_y]->getType()]);
+        if (Board[Tour_d_x][d_y]->getColor() == WHITE)
+            Game_status += string(WhitePiece_code[Board[Tour_d_x][d_y]->getType()]);
         else
-            Game_status += string(CodePiece_Noir[Board[Tour_d_x][d_y]->getType()]);
+            Game_status += string(BlackPiece_code[Board[Tour_d_x][d_y]->getType()]);
         Game_status += " a déjà bougé.\n\n";
         return;
     }
@@ -479,21 +477,21 @@ void Game::castling_move(const char* d_pos, const char* f_pos) {
     if (Board[d_x][d_y]->sestDeplace()) {
         invalide = true;
         Game_status += "Le mouvement roque est impossible car ";
-        if (Board[Tour_d_x][d_y]->getCouleur() == WHITE)
-            Game_status += string(CodePiece_Blanche[Board[d_x][d_y]->getType()]);
+        if (Board[Tour_d_x][d_y]->getColor() == WHITE)
+            Game_status += string(WhitePiece_code[Board[d_x][d_y]->getType()]);
         else
-            Game_status += string(CodePiece_Noir[Board[d_x][d_y]->getType()]);
+            Game_status += string(BlackPiece_code[Board[d_x][d_y]->getType()]);
         Game_status += " a déjà bougé.\n\n";
         return;
     }
 
-    if (checkmate(player_turn, king_position[player_turn])) {
+    if (toward_checkmate(player_turn, king_position[player_turn])) {
         invalide = true;
         Game_status += "Castling is impossible because of ";
-        if (Board[Tour_d_x][d_y]->getCouleur() == WHITE)
-            Game_status += string(CodePiece_Blanche[Board[d_x][d_y]->getType()]);
+        if (Board[Tour_d_x][d_y]->getColor() == WHITE)
+            Game_status += string(WhitePiece_code[Board[d_x][d_y]->getType()]);
         else
-            Game_status += string(CodePiece_Noir[Board[d_x][d_y]->getType()]);
+            Game_status += string(BlackPiece_code[Board[d_x][d_y]->getType()]);
         Game_status += " est en echec.\n\n";
         return;
     }
@@ -521,7 +519,7 @@ void Game::castling_move(const char* d_pos, const char* f_pos) {
     if (increment == -1) Game_status += " queenside- ";
     else Game_status += " kingside- ";
     Game_status += "castling.\n\n";
-    compteur ++;
+    counter ++;
     swap_players(player_turn);
 
     return;
@@ -605,20 +603,20 @@ bool Game::enpassant_move(const char* d_pos, const char* f_pos)
             {
                 if(d_y == 4 && f_y == 5)
                 {
-                    Game_status += string(CodePiece_Blanche[Board[d_x][d_y]->getType()]);
+                    Game_status += string(WhitePiece_code[Board[d_x][d_y]->getType()]);
                     Game_status += " a effectué une prise en passant,il s'est deplacé de ";
                     Game_status += d_pos;
                     Game_status += " vers ";
                     Game_status += f_pos;
                     Game_status += " en mangeant ";
-                    Game_status += string(CodePiece_Noir[Board[f_x][d_y]->getType()]);
+                    Game_status += string(BlackPiece_code[Board[f_x][d_y]->getType()]);
                     Game_status += ".\n\n";
                     
                     Board[f_x][f_y] = Board[d_x][d_y];
                     delete Board[f_x][d_y];
                     Board[d_x][d_y] = NULL;
                     Board[f_x][d_y] = NULL;
-                    compteur = 0;
+                    counter = 0;
                 }
                 else if(delta_y == 2)
                 {
@@ -636,19 +634,19 @@ bool Game::enpassant_move(const char* d_pos, const char* f_pos)
             {
                 if(d_y == 3 && f_y == 2)
                 {
-                    Game_status += string(CodePiece_Noir[Board[d_x][d_y]->getType()]);
+                    Game_status += string(BlackPiece_code[Board[d_x][d_y]->getType()]);
                     Game_status += " a effectué une prise en passant,il s'est deplacé de ";
                     Game_status += d_pos;
                     Game_status += " vers ";
                     Game_status += f_pos;
                     Game_status += " en mangeant ";
-                    Game_status += string(CodePiece_Blanche[Board[f_x][d_y]->getType()]);
+                    Game_status += string(WhitePiece_code[Board[f_x][d_y]->getType()]);
                     Game_status += ".\n\n";
                     Board[f_x][f_y] = Board[d_x][d_y];
                     delete Board[f_x][d_y];
                     Board[d_x][d_y] = NULL;
                     Board[f_x][d_y] = NULL;
-                    compteur = 0;
+                    counter = 0;
                 }
                 else if(delta_y == 2)
                 {
@@ -683,20 +681,25 @@ bool Game::enpassant_move(const char* d_pos, const char* f_pos)
 }
 
 
-Result Game::Check_result() {
+bool Game::Check_result() {
     
     if (est_enEchec[player_turn]) 
     {
-        if (!Peut_Deplacer(player_turn)) 
+        if (!can_move(player_turn)) 
         {
-            return ended;
+            return true;
         }
     }
     else {
-        if (compteur == 50 || !Peut_Deplacer(player_turn)) {
+        if (counter == 50 || !can_move(player_turn)) {
             Game_status += "\tGame ended in stalemate.\n";
-            return ended;
+            return true;
         }
     }
-    return ongoing;
+    return false;
+}
+
+bool Game::is_over() const{
+
+    return game_over;
 }

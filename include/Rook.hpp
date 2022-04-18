@@ -14,7 +14,7 @@ class Rook : public Piece {
         
     public:
 
-        Rook(Couleur couleur);
+        Rook(Color couleur);
 
         void deplace();
         bool sestDeplace() const;

@@ -13,7 +13,7 @@ class King : public Piece {
 
     public:
 
-        King(Couleur couleur);
+        King(Color couleur);
 
         void deplace();
         bool sestDeplace() const;

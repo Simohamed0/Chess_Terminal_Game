@@ -15,7 +15,6 @@
 
 using namespace std;
 
-enum Result {ongoing, ended};
 
 /**
  * @brief This Class manages and mantains the chess game .
@@ -29,9 +28,7 @@ class Game {
         
         bool invalide = false;
 
-        int compteur = 0;
-        
-        Result resultat;
+        int counter = 0; // for stalemate
 
         string Game_status = "";
 
@@ -39,7 +36,9 @@ class Game {
 
         bool est_enEchec[2] = {false, false};
         
-        Couleur player_turn = WHITE;  // white start the game
+        Color player_turn = WHITE;  // white start the game
+
+        bool game_over = false;
        
         /**
          * @brief verify if the square is empty or not
@@ -63,7 +62,7 @@ class Game {
          * 
          * @param j_tour color of the actual player
          */
-        void swap_players(Couleur& player_turn);
+        void swap_players(Color& player_turn);
 
        
         /** 
@@ -71,7 +70,7 @@ class Game {
          * 
          * @return the game result
          **/
-        Result Check_result();
+        bool Check_result();
 
         /**
          * @brief execute the castling mouvement
@@ -137,36 +136,34 @@ class Game {
          * @param position_roi  king position of the instant player
          * @return true if the instant player's king is checkmate
          **/
-        bool checkmate(Couleur joueur_actuel, const char* position_roi);
+        bool toward_checkmate(Color joueur_actuel, const char* position_roi);
 
         /**
-         * @brief Permet de vérifier si le joueur peut déplacer une pièce
-         *        Cette fonction est utile pour la fonctionalité PAT et Echec et Mat
+         * @brief verify if the instant player is able to move a piece
          * 
-         * @param joueur couleur du joueur (Blanc/Noir)
-         * @return true s'il lui reste des pièces qui peuvent se déplacer
+         * @param joueur instant player
+         * @return true if he can move a piece false otherwise
          **/
-        bool Peut_Deplacer(Couleur joueur);
+        bool can_move(Color joueur);
         
         /**
-         * @brief Permet d'afficher l'échiquier
+         * @brief display the board in the terminal
          *        
          **/
-        void afficher() const;
+        void display() const;
 
         /**
-         * @brief Permet de connaitre le joueur actuel
+         * @brief get the instant player
          *        
          **/
-        Couleur get_Jactuel();
+        Color instant_player() const;
 
-        /**
-         * @brief Fonction auxiliaire permettant à la fin d'obtenir la forme canonique 
-         *        des positions finales des pièces de l'échiquier.
-         *        
+        /** @brief check if the game is over
+         * 
          **/
+        bool is_over() const;
+
         string pgn_piece_name(string const name, bool view_pawn, bool view_color) const;
-
 };
 
 

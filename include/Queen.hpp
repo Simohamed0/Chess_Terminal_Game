@@ -11,5 +11,5 @@ class Queen : public Piece {
         
     public:
 
-        Queen(Couleur couleur);
+        Queen(Color couleur);
 };

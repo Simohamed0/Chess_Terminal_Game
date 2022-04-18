@@ -1,8 +1,8 @@
 #include "Bishop.hpp"
 
 
-Bishop::Bishop(Couleur couleur) : Piece(couleur) {
-    type = bishop;
+Bishop::Bishop(Color couleur) : Piece(couleur) {
+    m_type = bishop;
 }
 
 

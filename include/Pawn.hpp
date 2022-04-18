@@ -26,7 +26,7 @@ class Pawn : public Piece {
 
     public:
 
-        Pawn(Couleur couleur);
+        Pawn(Color couleur);
 
         void deplace();
         bool sestDeplace() const;

@@ -2,8 +2,8 @@
 
 
 
-Knight::Knight(Couleur couleur) : Piece(couleur) {
-    type = knight;
+Knight::Knight(Color couleur) : Piece(couleur) {
+    m_type = knight;
 }
 
 

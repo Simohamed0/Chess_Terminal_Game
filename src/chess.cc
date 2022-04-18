@@ -23,16 +23,15 @@ int main() {
         
     Game m_Game;
     string input;
-    char start_pos[] = "00\0";
-    char end_pos  [] = "AA\0";
+    char start_pos[] = "a1\0";
+    char end_pos  [] = "h8\0";
 
-    while (input != "quit") 
+    while (input != "quit" ) 
     {    
         
-        m_Game.afficher();
-
-        if (m_Game.enCours())
-            cout << "Coup (eg. a1a8) ? ";
+        m_Game.display();
+        if(!m_Game.is_over())
+            cout << "play " ;
         else
             break;
         cin >> input;
@@ -54,7 +53,7 @@ int main() {
 
         else if (saisie_correcte_petitroque(input))
         {
-            if(m_Game.get_Jactuel() == WHITE)
+            if(m_Game.instant_player() == WHITE)
             {
                 m_Game.deplacer("e1", "g1",true);
             }
@@ -65,7 +64,7 @@ int main() {
         }
         else if (saisie_correcte_grandroque(input))
         {
-            if(m_Game.get_Jactuel() == WHITE)
+            if(m_Game.instant_player() == WHITE)
             {
                 m_Game.deplacer("e1", "c1",true);
             }

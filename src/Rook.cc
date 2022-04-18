@@ -2,8 +2,8 @@
 
 
 
-Rook::Rook(Couleur couleur) : Piece(couleur) {
-    type = rook;
+Rook::Rook(Color couleur) : Piece(couleur) {
+    m_type = rook;
 }
 
 

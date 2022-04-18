@@ -1,7 +1,7 @@
 #include "Queen.hpp"
 
-Queen::Queen(Couleur couleur) : Piece(couleur) {
-    type = queen;
+Queen::Queen(Color couleur) : Piece(couleur) {
+    m_type = queen;
 }
 
 int Queen::Mouvement_Piece(const char* d_pos, const char* f_pos, Piece* echiquier[][8]) const {

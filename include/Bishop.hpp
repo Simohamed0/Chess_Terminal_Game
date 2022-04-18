@@ -12,5 +12,5 @@ class Bishop : public Piece {
         
     public:
 
-        Bishop(Couleur couleur);
+        Bishop(Color couleur);
 };
