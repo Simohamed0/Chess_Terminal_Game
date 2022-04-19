@@ -4,7 +4,7 @@
 #define DEPLACEMENT_ECHEC  1 
 #define WRONG_PLAYER       2    
 #define OCCUPIED_CASE      3   
-#define MOUVEMENT_INVALIDE 4 
+#define INVALIDE_MOVEMENT  4 
 #define OBSTACLE           5    
 
 enum Color {WHITE, BLACK};

@@ -7,18 +7,18 @@ Rook::Rook(Color couleur) : Piece(couleur) {
 }
 
 
-int Rook::Mouvement_Piece(const char* d_pos, const char* f_pos, Piece* echiquier[][8]) const {
+int Rook::piece_movement(const char* d_pos, const char* f_pos, Piece* echiquier[][8]) const {
     if (!M_Ligne(d_pos, f_pos))
-        return MOUVEMENT_INVALIDE;
+        return INVALIDE_MOVEMENT;
     
-    if (!DetectionObstacle(d_pos, f_pos, echiquier))
+    if (!obstacle_detection(d_pos, f_pos, echiquier))
         return OBSTACLE;
 
     return OK;
 }
 
 
-bool Rook::DetectionObstacle(const char* d_pos, const char* f_pos, Piece* echiquier[][8]) const {
+bool Rook::obstacle_detection(const char* d_pos, const char* f_pos, Piece* echiquier[][8]) const {
     int d_x = d_pos[0] - 'a';
     int d_y = d_pos[1] - '1';
     int f_x = f_pos[0] - 'a';
@@ -53,11 +53,11 @@ bool Rook::DetectionObstacle(const char* d_pos, const char* f_pos, Piece* echiqu
 }
 
 
-bool Rook::sestDeplace() const {
+bool Rook::already_moved() const {
     return sest_deplace;
 }
 
 
-void Rook::deplace() {
+void Rook::has_been_moved() {
     sest_deplace = true;
 }

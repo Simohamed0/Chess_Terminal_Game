@@ -11,8 +11,7 @@ Color Piece::getColor() const {
     return m_color;
 }
 
-
- Type Piece::getType() const {
+Type Piece::getType() const {
     return m_type;
 }
 
@@ -31,7 +30,7 @@ int Piece::Mouvement_EstValide(const char* d_pos, const char* f_pos, Piece* echi
     }
 
 
-    int erreur = this->Mouvement_Piece(d_pos, f_pos, echiquier);
+    int erreur = this->piece_movement(d_pos, f_pos, echiquier);
     if (erreur)
         return erreur;
     return OK;

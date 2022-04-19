@@ -30,7 +30,7 @@ class Piece {
          * @param Board[][8] 
          * @return 0 if the movement is authorized
          */
-        virtual int Mouvement_Piece(const char* d_pos, const char* f_pos, Piece* Board[][8]) const {
+        virtual int piece_movement(const char* d_pos, const char* f_pos, Piece* Board[][8]) const {
             (void)d_pos;
             (void)f_pos;
             (void)Board;
@@ -44,7 +44,7 @@ class Piece {
          * @param Board pointer to Board[][8]
          * @return 0 if there is no obstacle
          */
-        virtual bool DetectionObstacle(const char* d_pos, const char* f_pos, Piece* Board[][8]) const {
+        virtual bool obstacle_detection(const char* d_pos, const char* f_pos, Piece* Board[][8]) const {
             (void) d_pos;
             (void) f_pos;
             (void)Board;
@@ -99,12 +99,12 @@ class Piece {
          *        ça sera utile pour coder le mouvement Roque.
          * @return true si la pièce à bouger.
          */
-        virtual bool sestDeplace() const {return 0;};
+        virtual bool already_moved() const {return 0;};
 
         /**
-         * @brief Permet de mettre sest_deplace en true si la pièce bouge.
+         * @brief change has_already_moved variable to true.
          */
-        virtual void deplace() {return;};
+        virtual void has_been_moved() {return;};
 
         virtual bool Est_En_Passant() const {return 0;}
         virtual void En_Passant(){return;};

@@ -7,10 +7,10 @@ Knight::Knight(Color couleur) : Piece(couleur) {
 }
 
 
-int Knight::Mouvement_Piece(const char* d_pos, const char* f_pos, Piece* echiquier[][8]) const {
+int Knight::piece_movement(const char* d_pos, const char* f_pos, Piece* echiquier[][8]) const {
     (void)echiquier;
     if (!Mouvement_L(d_pos, f_pos))
-        return MOUVEMENT_INVALIDE;
+        return INVALIDE_MOVEMENT;
 
     return OK;
 }

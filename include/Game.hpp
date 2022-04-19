@@ -120,7 +120,7 @@ class Game {
          * @param f_pos final position
          * @param roque bool if it's a castling move
          **/
-        void deplacer(const char* d_pos, const char* f_pos,bool roque = false);
+        void deplacer(const char* d_pos, const char* f_pos,bool castling = false);
 
         /**
          * @brief verify if the game is ongoing

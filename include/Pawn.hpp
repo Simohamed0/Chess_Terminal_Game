@@ -10,7 +10,7 @@ class Pawn : public Piece {
         bool En_passant   = false;
         bool sest_deplace = false;
         
-        int Mouvement_Piece(const char* d_pos, const char* f_pos, Piece* echiquier[][8]) const;
+        int piece_movement(const char* d_pos, const char* f_pos, Piece* echiquier[][8]) const;
 
         /**
          * @brief Fonction Spécial pour le pion pour traiter la manière de deplacement du pion
@@ -22,14 +22,14 @@ class Pawn : public Piece {
          */
         bool AdjacentV(const char* d_pos, const char* f_pos, Piece* echiquier[][8]) const;
 
-        bool DetectionObstacle(const char* d_pos, const char* f_pos, Piece* echiquier[][8]) const;
+        bool obstacle_detection(const char* d_pos, const char* f_pos, Piece* echiquier[][8]) const;
 
     public:
 
         Pawn(Color couleur);
 
-        void deplace();
-        bool sestDeplace() const;
+        void has_been_moved();
+        bool already_moved() const;
 
         bool Est_En_Passant() const;
         void En_Passant();

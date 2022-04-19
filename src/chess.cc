@@ -26,7 +26,7 @@ int main() {
     char start_pos[] = "a1\0";
     char end_pos  [] = "h8\0";
 
-    while (input != "quit" ) 
+    while (input != "/quit" ) 
     {    
         
         m_Game.display();
@@ -75,7 +75,7 @@ int main() {
         }
         else
         {
-            if(input != "quit")
+            if(input != "/quit")
             cerr << "\tYour coordinates " << input << " are not correct retry !.\n";
         }
         

@@ -8,14 +8,14 @@ class Rook : public Piece {
 
         bool sest_deplace = false;
 
-        int Mouvement_Piece(const char* d_pos, const char* f_pos, Piece* echiquier[][8]) const;
+        int piece_movement(const char* d_pos, const char* f_pos, Piece* echiquier[][8]) const;
 
-        bool DetectionObstacle(const char* d_pos, const char* f_pos, Piece* echiquier[][8]) const;
+        bool obstacle_detection(const char* d_pos, const char* f_pos, Piece* echiquier[][8]) const;
         
     public:
 
         Rook(Color couleur);
 
-        void deplace();
-        bool sestDeplace() const;
+        void has_been_moved();
+        bool already_moved() const;
 };

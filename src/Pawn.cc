@@ -5,13 +5,14 @@ Pawn::Pawn(Color couleur) : Piece(couleur) {
     m_type = pawn;
 }
 
-int Pawn::Mouvement_Piece(const char* d_pos, const char* f_pos, Piece* echiquier[][8]) const {
+int Pawn::piece_movement(const char* d_pos, const char* f_pos, Piece* echiquier[][8]) const {
     
     if (!AdjacentV(d_pos, f_pos, echiquier))
     {
-        return MOUVEMENT_INVALIDE;
+        return INVALIDE_MOVEMENT;
     }
-    if (!DetectionObstacle(d_pos, f_pos, echiquier))
+
+    if (!obstacle_detection(d_pos, f_pos, echiquier))
     {
         return OBSTACLE;
     }
@@ -20,6 +21,7 @@ int Pawn::Mouvement_Piece(const char* d_pos, const char* f_pos, Piece* echiquier
 
 
 bool Pawn::AdjacentV(const char* d_pos, const char* f_pos, Piece* echiquier[][8]) const {
+    
     int d_x = d_pos[0] - 'a';
     int d_y = d_pos[1] - '1';
     int f_x = f_pos[0] - 'a';
@@ -27,10 +29,11 @@ bool Pawn::AdjacentV(const char* d_pos, const char* f_pos, Piece* echiquier[][8]
     int delta_y = f_y - d_y;
     int delta_x = abs(f_x - d_x);
     
-    if (this->getColor() == BLACK)
+    if (getColor() == BLACK)
     {
         delta_y = delta_y * (-1);
     }
+    
     if (delta_x == 1 && delta_y == 1) 
     {
         if (echiquier[f_x][f_y] != NULL)
@@ -39,7 +42,9 @@ bool Pawn::AdjacentV(const char* d_pos, const char* f_pos, Piece* echiquier[][8]
         
 
     if (delta_x == 0 && echiquier[f_x][f_y] == NULL) {
-        if (!this->sestDeplace()) {
+        
+        if (!already_moved()) 
+        {
             if ((delta_y == 1) || (delta_y == 2))
             {
                 return true;
@@ -54,7 +59,7 @@ bool Pawn::AdjacentV(const char* d_pos, const char* f_pos, Piece* echiquier[][8]
 }
 
 
-bool Pawn::DetectionObstacle(const char* d_pos, const char* f_pos, Piece* echiquier[][8]) const {
+bool Pawn::obstacle_detection(const char* d_pos, const char* f_pos, Piece* echiquier[][8]) const {
     int d_x = d_pos[0] - 'a';
     int d_y = d_pos[1] - '1';
     int f_y = f_pos[1] - '1';
@@ -80,10 +85,10 @@ void Pawn::Pas_En_Passant() {
     En_passant = false;
 }
 
-bool Pawn::sestDeplace() const {
+bool Pawn::already_moved() const {
     return sest_deplace;
 }
 
-void Pawn::deplace() {
+void Pawn::has_been_moved() {
     sest_deplace = true;
 }
