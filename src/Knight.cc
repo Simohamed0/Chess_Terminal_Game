@@ -2,13 +2,13 @@
 
 
 
-Knight::Knight(Color couleur) : Piece(couleur) {
+Knight::Knight(Color color) : Piece(color) {
     m_type = knight;
 }
 
 
-int Knight::piece_movement(const char* d_pos, const char* f_pos, Piece* echiquier[][8]) const {
-    (void)echiquier;
+int Knight::piece_movement(const char* d_pos, const char* f_pos, Piece* Board[][8]) const {
+    (void)Board;
     if (!Mouvement_L(d_pos, f_pos))
         return INVALIDE_MOVEMENT;
 

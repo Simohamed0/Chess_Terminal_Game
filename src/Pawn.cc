@@ -1,18 +1,18 @@
 #include "Pawn.hpp"
 
 
-Pawn::Pawn(Color couleur) : Piece(couleur) {
+Pawn::Pawn(Color color) : Piece(color) {
     m_type = pawn;
 }
 
-int Pawn::piece_movement(const char* d_pos, const char* f_pos, Piece* echiquier[][8]) const {
+int Pawn::piece_movement(const char* d_pos, const char* f_pos, Piece* Board[][8]) const {
     
-    if (!AdjacentV(d_pos, f_pos, echiquier))
+    if (!AdjacentV(d_pos, f_pos, Board))
     {
         return INVALIDE_MOVEMENT;
     }
 
-    if (!obstacle_detection(d_pos, f_pos, echiquier))
+    if (!obstacle_detection(d_pos, f_pos, Board))
     {
         return OBSTACLE;
     }

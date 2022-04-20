@@ -14,7 +14,8 @@
 #objet
 *.o
 
+latex
+
 html
 
-latex
 

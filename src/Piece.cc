@@ -16,7 +16,7 @@ Type Piece::getType() const {
 }
 
 
-int Piece::Mouvement_EstValide(const char* d_pos, const char* f_pos, Piece* echiquier[][8], Color j_tour) const {
+int Piece::Mouvement_EstValide(const char* d_pos, const char* f_pos, Piece* Board[][8], Color j_tour) const {
 
         
     if (j_tour != this->m_color)
@@ -24,13 +24,13 @@ int Piece::Mouvement_EstValide(const char* d_pos, const char* f_pos, Piece* echi
     
     const int col = f_pos[0] - 'a';
     const int ligne = f_pos[1] - '1';
-    if (echiquier[col][ligne] != NULL) {
-        if (echiquier[col][ligne]->getColor() == this->m_color)
+    if (Board[col][ligne] != NULL) {
+        if (Board[col][ligne]->getColor() == this->m_color)
             return OCCUPIED_CASE;
     }
 
 
-    int erreur = this->piece_movement(d_pos, f_pos, echiquier);
+    int erreur = this->piece_movement(d_pos, f_pos, Board);
     if (erreur)
         return erreur;
     return GOOD;

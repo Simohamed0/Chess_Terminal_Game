@@ -8,7 +8,7 @@ class King : public Piece {
 
         bool has_already_moved = false; // for castling 
 
-        int piece_movement(const char* d_pos, const char* f_pos, Piece* echiquier[][8]) const;
+        int piece_movement(const char* d_pos, const char* f_pos, Piece* Board[][8]) const;
 
     public:
 
@@ -17,7 +17,7 @@ class King : public Piece {
          * 
          * @param couleur 
          */
-        King(Color couleur);
+        King(Color color);
 
         void has_been_moved();
 

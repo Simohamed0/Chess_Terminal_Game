@@ -2,18 +2,22 @@
 
 
 
-Rook::Rook(Color couleur) : Piece(couleur) {
+Rook::Rook(Color color) : Piece(color) {
     m_type = rook;
 }
 
 
-int Rook::piece_movement(const char* d_pos, const char* f_pos, Piece* echiquier[][8]) const {
-    if (!M_Ligne(d_pos, f_pos))
-        return INVALIDE_MOVEMENT;
+int Rook::piece_movement(const char* d_pos, const char* f_pos, Piece* Board[][8]) const {
     
-    if (!obstacle_detection(d_pos, f_pos, echiquier))
+    if (!M_Ligne(d_pos, f_pos))
+    {
+        return INVALIDE_MOVEMENT;
+    }
+    if (!obstacle_detection(d_pos, f_pos, Board))
+    {
         return OBSTACLE;
-
+    }
+    
     return GOOD;
 }
 
@@ -34,7 +38,9 @@ bool Rook::obstacle_detection(const char* d_pos, const char* f_pos, Piece* echiq
         while (i != f_y)
         {
             if (echiquier[d_x][i] != NULL)
+            {
                 return false;
+            }
             i+=increment;
         }
     }
@@ -44,7 +50,9 @@ bool Rook::obstacle_detection(const char* d_pos, const char* f_pos, Piece* echiq
         while (i != f_x)
         {
             if (echiquier[i][d_y] != NULL)
+            {
                 return false;
+            }
             i+=increment;
         }
     }

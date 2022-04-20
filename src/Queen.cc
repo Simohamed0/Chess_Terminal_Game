@@ -1,21 +1,21 @@
 #include "Queen.hpp"
 
-Queen::Queen(Color couleur) : Piece(couleur) {
+Queen::Queen(Color color) : Piece(color) {
     m_type = queen;
 }
 
-int Queen::piece_movement(const char* d_pos, const char* f_pos, Piece* echiquier[][8]) const {
+int Queen::piece_movement(const char* d_pos, const char* f_pos, Piece* Board[][8]) const {
     
     if (!M_Diagonal(d_pos, f_pos) && !M_Ligne(d_pos, f_pos))
         return INVALIDE_MOVEMENT;
     
-    if (!obstacle_detection(d_pos, f_pos, echiquier))
+    if (!obstacle_detection(d_pos, f_pos, Board))
         return OBSTACLE;
 
     return GOOD;
 }
 
-bool Queen::obstacle_detection(const char* d_pos, const char* f_pos, Piece* echiquier[][8]) const {
+bool Queen::obstacle_detection(const char* d_pos, const char* f_pos, Piece* Board[][8]) const {
     
     int d_x = d_pos[0] - 'a';
     int d_y = d_pos[1] - '1';
@@ -32,7 +32,7 @@ bool Queen::obstacle_detection(const char* d_pos, const char* f_pos, Piece* echi
         j = d_y + compt;
         while (j != f_y)
         {
-            if (echiquier[d_x][j] != NULL)
+            if (Board[d_x][j] != NULL)
                 return false;
             j += compt;
         }
@@ -43,7 +43,7 @@ bool Queen::obstacle_detection(const char* d_pos, const char* f_pos, Piece* echi
         j = d_x + compt;
         while (j != f_x)
         {
-            if (echiquier[j][d_y] != NULL)
+            if (Board[j][d_y] != NULL)
             {
                 return false;
             }
@@ -57,7 +57,7 @@ bool Queen::obstacle_detection(const char* d_pos, const char* f_pos, Piece* echi
     { 
 		for (int i = -1; i != delta_x; --i)
 		{
-            if (echiquier[d_x + i][d_y + (i * multiplier)] != NULL)
+            if (Board[d_x + i][d_y + (i * multiplier)] != NULL)
             {
 				return false;
             }
@@ -67,7 +67,7 @@ bool Queen::obstacle_detection(const char* d_pos, const char* f_pos, Piece* echi
     {
     	for (int i = 1; i != delta_x; ++i)
         {
-			if (echiquier[d_x + i][d_y + (i * multiplier)] != NULL)
+			if (Board[d_x + i][d_y + (i * multiplier)] != NULL)
             {
 				return false;
             }

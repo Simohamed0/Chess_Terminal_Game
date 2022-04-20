@@ -10,7 +10,7 @@ class Pawn : public Piece {
         bool En_passant   = false;
         bool sest_deplace = false;
         
-        int piece_movement(const char* d_pos, const char* f_pos, Piece* echiquier[][8]) const;
+        int piece_movement(const char* d_pos, const char* f_pos, Piece* Board[][8]) const;
 
         /**
          * @brief trait the pawn movement when he take down an ennemy piece
@@ -25,7 +25,7 @@ class Pawn : public Piece {
 
     public:
 
-        Pawn(Color couleur);
+        Pawn(Color color);
 
         void has_been_moved();
         bool already_moved() const;
