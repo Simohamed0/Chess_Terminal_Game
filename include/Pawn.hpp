@@ -13,12 +13,11 @@ class Pawn : public Piece {
         int piece_movement(const char* d_pos, const char* f_pos, Piece* echiquier[][8]) const;
 
         /**
-         * @brief Fonction Spécial pour le pion pour traiter la manière de deplacement du pion
-         *        quand il mange une pièce énnemie
+         * @brief trait the pawn movement when he take down an ennemy piece
          *
-         * @param d_pos position de départ
-         * @param f_pos position d'arrivé/finale
-         * @return true s'il peut faire se deplacement.
+         * @param d_pos departure position
+         * @param f_pos final position
+         * @return true if the pawn can move
          */
         bool AdjacentV(const char* d_pos, const char* f_pos, Piece* echiquier[][8]) const;
 
@@ -31,9 +30,9 @@ class Pawn : public Piece {
         void has_been_moved();
         bool already_moved() const;
 
-        bool Est_En_Passant() const;
-        void En_Passant();
-        void Pas_En_Passant();
+        bool is_enPassant() const;
+        void enPassant();
+        void not_enPassant();
 
 
 };

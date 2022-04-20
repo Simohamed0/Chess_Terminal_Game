@@ -7,13 +7,17 @@ Bishop::Bishop(Color couleur) : Piece(couleur) {
 
 
 int Bishop::piece_movement(const char* d_pos, const char* f_pos, Piece* echiquier[][8]) const {
+    
     if (!M_Diagonal(d_pos, f_pos))
+    {
         return INVALIDE_MOVEMENT;
-    
+    }
+
     if (!obstacle_detection(d_pos, f_pos, echiquier))
+    {
         return OBSTACLE;
-    
-    return OK;
+    }
+    return GOOD;
 }
 
 

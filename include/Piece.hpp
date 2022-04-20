@@ -34,7 +34,7 @@ class Piece {
             (void)d_pos;
             (void)f_pos;
             (void)Board;
-            return OK;};
+            return GOOD;};
         
         /**
          * @brief verify if there is any obstacle for the piece mouvement
@@ -48,7 +48,7 @@ class Piece {
             (void) d_pos;
             (void) f_pos;
             (void)Board;
-            return OK;}; 
+            return GOOD;}; 
 
         /**
          * @brief verify if the mouvement is diagonal
@@ -106,9 +106,9 @@ class Piece {
          */
         virtual void has_been_moved() {return;};
 
-        virtual bool Est_En_Passant() const {return 0;}
-        virtual void En_Passant(){return;};
-        virtual void Pas_En_Passant(){return;};
+        virtual bool is_enPassant() const {return 0;}
+        virtual void enPassant(){return;};
+        virtual void not_enPassant(){return;};
 
         Color getColor() const;
         Type   getType() const;

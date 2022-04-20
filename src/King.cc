@@ -7,12 +7,14 @@ King::King(Color couleur) : Piece(couleur) {
 }
 
 
-int King::piece_movement(const char* d_pos, const char* f_pos, Piece* echiquier[][8]) const {
-    (void)echiquier;
+int King::piece_movement(const char* d_pos, const char* f_pos, Piece* Board[][8]) const {
+    
+    (void)Board;
     if (!AdjacentVH(d_pos, f_pos))
+    {
         return INVALIDE_MOVEMENT;
-        
-    return OK;
+    }   
+    return GOOD;
 }
 
 

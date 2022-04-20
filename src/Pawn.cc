@@ -16,7 +16,7 @@ int Pawn::piece_movement(const char* d_pos, const char* f_pos, Piece* echiquier[
     {
         return OBSTACLE;
     }
-    return OK;
+    return GOOD;
 }
 
 
@@ -50,12 +50,13 @@ bool Pawn::AdjacentV(const char* d_pos, const char* f_pos, Piece* echiquier[][8]
                 return true;
             }      
         }
-        else {
-            if (delta_y == 1)
+        else if (delta_y == 1)
+        {
                 return true;
         }
-    }
+    }   
     return false;    
+    
 }
 
 
@@ -74,14 +75,14 @@ bool Pawn::obstacle_detection(const char* d_pos, const char* f_pos, Piece* echiq
     return true;
 }
 
-bool Pawn::Est_En_Passant() const {
+bool Pawn::is_enPassant() const {
     return En_passant;
 }
 
-void Pawn::En_Passant() {
+void Pawn::enPassant() {
     En_passant = true;
 }
-void Pawn::Pas_En_Passant() {
+void Pawn::not_enPassant() {
     En_passant = false;
 }
 

@@ -8,5 +8,13 @@
 
 # test :
 
-### you can run some tests by executing sh test.sh 
+### you can run some tests by executing ./test-level.sh 
+
+# valgrind :
+
+### the program passes the memory test by valgrind no memory leak detected
+
+# difficulties :
+
+
  

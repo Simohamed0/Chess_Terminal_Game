@@ -12,7 +12,7 @@ int Queen::piece_movement(const char* d_pos, const char* f_pos, Piece* echiquier
     if (!obstacle_detection(d_pos, f_pos, echiquier))
         return OBSTACLE;
 
-    return OK;
+    return GOOD;
 }
 
 bool Queen::obstacle_detection(const char* d_pos, const char* f_pos, Piece* echiquier[][8]) const {

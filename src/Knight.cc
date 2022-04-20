@@ -12,7 +12,7 @@ int Knight::piece_movement(const char* d_pos, const char* f_pos, Piece* echiquie
     if (!Mouvement_L(d_pos, f_pos))
         return INVALIDE_MOVEMENT;
 
-    return OK;
+    return GOOD;
 }
 
 

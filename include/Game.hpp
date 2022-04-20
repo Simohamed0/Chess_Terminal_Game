@@ -81,7 +81,7 @@ class Game {
         void castling_move(const char* d_pos, const char* f_pos);
 
         /**
-         * @brief Initialise le mouvement en_passant
+         * @brief Initialise en_passant movement
         **/
         void init_enpassant();
 

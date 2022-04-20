@@ -342,7 +342,7 @@ bool Game::if_checkmate(const char* d_pos, const char* f_pos) {
     Board[d_x][d_y] = Board[f_x][f_y];
     Board[f_x][f_y] = piece_tmp;
     strcpy(king_position[player_turn], king_position_tmp);
-    return OK;
+    return GOOD;
 }
 
 
@@ -409,7 +409,7 @@ bool Game::toward_checkmate(Color joueur_actuel, const char* king_position) {
             {
                 test_pos[0] = col + 'a';
                 test_pos[1] = ligne + '1';
-                if (Board[col][ligne]->Mouvement_EstValide(test_pos, king_position, Board, autre_joueur) == OK) 
+                if (Board[col][ligne]->Mouvement_EstValide(test_pos, king_position, Board, autre_joueur) == GOOD) 
                 {
                     return true;
                 }
@@ -435,7 +435,7 @@ bool Game::can_move(Color joueur) {
                         d_pos[1] = j;
                         f_pos[0] = k;
                         f_pos[1] = l;
-                        if (Board[i - 'a'][j - '1']->Mouvement_EstValide(d_pos, f_pos, Board, joueur) == OK)
+                        if (Board[i - 'a'][j - '1']->Mouvement_EstValide(d_pos, f_pos, Board, joueur) == GOOD)
                             if (if_checkmate(d_pos, f_pos) != DEPLACEMENT_ECHEC) 
                                 return true;
                     }
@@ -601,8 +601,8 @@ void Game::init_enpassant()
     {
         for(int ligne = 0; ligne < 8; ligne ++)
         {
-            if(Board[col][ligne] != NULL && Board[col][ligne]->getType() == pawn && Board[col][ligne]->Est_En_Passant())
-                Board[col][ligne]->Pas_En_Passant();
+            if(Board[col][ligne] != NULL && Board[col][ligne]->getType() == pawn && Board[col][ligne]->is_enPassant())
+                Board[col][ligne]->not_enPassant();
         }
     }
 }
@@ -629,7 +629,7 @@ bool Game::enpassant_move(const char* d_pos, const char* f_pos)
     
     if (Board[f_x][d_y] != NULL && Board[f_x][d_y]->getType() == pawn )
     {
-        if(Board[f_x][d_y]->Est_En_Passant())
+        if(Board[f_x][d_y]->is_enPassant())
         {
             if(player_turn == WHITE)
             {
@@ -654,7 +654,7 @@ bool Game::enpassant_move(const char* d_pos, const char* f_pos)
                 else if(delta_y == 2)
                 {
                     init_enpassant();
-                    Board[f_x][d_y]->En_Passant();
+                    Board[f_x][d_y]->enPassant();
                     return false; 
                 }
                 else
@@ -665,7 +665,7 @@ bool Game::enpassant_move(const char* d_pos, const char* f_pos)
             }
             else
             {
-                if(d_y == 3 && f_y == 2)
+                if( d_y == 3 && f_y == 2 )
                 {
                     Game_status += string(BlackPiece_code[Board[d_x][d_y]->getType()]);
                     Game_status += " moved from ";
@@ -686,7 +686,7 @@ bool Game::enpassant_move(const char* d_pos, const char* f_pos)
                 else if(delta_y == 2)
                 {
                     init_enpassant();
-                    Board[f_x][d_y]->En_Passant();
+                    Board[f_x][d_y]->enPassant();
                     return false; 
                 }
                 else
@@ -698,10 +698,10 @@ bool Game::enpassant_move(const char* d_pos, const char* f_pos)
             
             return true;
         }
-        else if(delta_y == 2)
+        else if( delta_y == 2 )
         {
             init_enpassant();
-            Board[f_x][d_y]->En_Passant();
+            Board[f_x][d_y]->enPassant();
             return false; 
         }
         else

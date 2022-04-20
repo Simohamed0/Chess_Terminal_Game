@@ -1,11 +1,7 @@
 #include <cstring>
 
-#define OK                 0
-#define DEPLACEMENT_ECHEC  1 
-#define WRONG_PLAYER       2    
-#define OCCUPIED_CASE      3   
-#define INVALIDE_MOVEMENT  4 
-#define OBSTACLE           5    
+   
+enum Possible_cases{GOOD, DEPLACEMENT_ECHEC, WRONG_PLAYER, OCCUPIED_CASE, INVALIDE_MOVEMENT, OBSTACLE};
 
 enum Color {WHITE, BLACK};
 const char color_display[][6] = {"white", "black"};

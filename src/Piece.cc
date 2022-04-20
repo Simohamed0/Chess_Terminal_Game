@@ -33,7 +33,7 @@ int Piece::Mouvement_EstValide(const char* d_pos, const char* f_pos, Piece* echi
     int erreur = this->piece_movement(d_pos, f_pos, echiquier);
     if (erreur)
         return erreur;
-    return OK;
+    return GOOD;
 }
 
 
