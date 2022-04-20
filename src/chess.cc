@@ -30,6 +30,7 @@ int main() {
     {    
         
         m_Game.display();
+        
         if(!m_Game.is_over())
             cout << "play " ;
         else
