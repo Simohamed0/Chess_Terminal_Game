@@ -1,20 +1,39 @@
-# description :
+# Chess Terminal Game
 
-### Chess project simulate a chess game between two human players on the terminal with all chess functionalities .The project compile with all the necessary flags and pass successfully valgrind tests of memory usage and memory leaks.
+## Overview:
 
-# compliation :
+This chess project is a class assignment for implementing a chess game in C++ using object-oriented paradigms. The game runs in the terminal, providing a comprehensive set of chess functionalities for an complete playing experience.
 
-### to compile the  executable called chess all you have to do is tap make on the terminal and to execute it with make run
+## Compilation:
 
-# test :
+To compile the executable named "chess," simply execute the following command in the terminal:
 
-### you can run some tests by executing ./test-level.sh 
+```bash
+make
+```
 
-# valgrind :
+To run the compiled program, use:
 
-### the program passes the memory test by valgrind no memory leak detected
+```bash
+make run
+```
 
-# difficulties :
+## Testing:
 
+Execute various tests using the provided test script:
 
- 
+```bash
+./test-level.sh
+```
+
+## Memory Management:
+
+The program undergoes rigorous memory testing using Valgrind. It successfully passes all tests, ensuring there are no memory leaks or excessive memory usage.
+
+```bash
+valgrind ./chess
+```
+
+## Contributors:
+
+- [Mohamed Faid](https://github.com/Simohamed0) 
